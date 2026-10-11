@@ -238,7 +238,6 @@ jobs:
       - name: Connect Tailscale (optional, for RDP)
         env:
           TS_KEY: ${{ secrets.TAILSCALE_AUTHKEY }}
-        if: ${{ secrets.TAILSCALE_AUTHKEY != '' }}
         run: |
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up --authkey "$TS_KEY" --hostname "win11-github" --accept-routes=false
