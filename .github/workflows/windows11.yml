@@ -235,11 +235,14 @@ jobs:
           echo " Login password     : (your ACCESS_PASSWORD secret)"
           echo "=============================================================="
 
-      - name: Connect Tailscale (optional, for RDP)
+      -       - name: Connect Tailscale (optional, for RDP)
         env:
           TS_KEY: ${{ secrets.TAILSCALE_AUTHKEY }}
-        if: ${{ secrets.TAILSCALE_AUTHKEY != '' }}
         run: |
+          if [ -z "$TS_KEY" ]; then
+            echo "TAILSCALE_AUTHKEY is not set → skipping RDP setup."
+            exit 0
+          fi
           curl -fsSL https://tailscale.com/install.sh | sh
           sudo tailscale up --authkey "$TS_KEY" --hostname "win11-github" --accept-routes=false
           TS_IP=$(tailscale ip -4)
